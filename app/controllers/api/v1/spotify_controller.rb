@@ -1,9 +1,11 @@
 class Api::V1::SpotifyController < ApplicationController
-  before_action :set_user, only: [:recommend]
+  before_action :set_user, only: [:search]
 
-  def recommend
+
+  def search
 
     search_genre = search_params["genre"]
+
 
     url = 'https://api.spotify.com/v1/recommendations'
 
@@ -12,9 +14,8 @@ class Api::V1::SpotifyController < ApplicationController
     }
 
     query_params = {
-      q: 'year:' + search_year,
-      type: 'track',
-      limit: 30
+      seed_genres: search_genre,
+      limit: 50
     }
 
     fetchUrl ="#{url}?#{query_params.to_query}"
@@ -23,6 +24,10 @@ class Api::V1::SpotifyController < ApplicationController
 
     search_data = JSON.parse(search_get_response.body)
 
+    binding.pry
+
+    redirect_to "http://localhost:3001"
+
   end
 
   private
@@ -30,4 +35,9 @@ class Api::V1::SpotifyController < ApplicationController
   def set_user
     @@current_user = User.find(ENV["CURRENT_USER_ID"].to_i)
   end
+
+  def search_params
+    params.permit(:genre)
+  end
+
 end

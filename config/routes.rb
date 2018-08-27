@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       resources :genres, only: [:index]
       get 'logging-in', :to => 'users#create'
       get 'load-genres', :to => 'genres#create'
-      get 'recommend', :to => 'spotify#recommend'
+      get 'search', :to => 'spotify#search'
     end
   end
 end
