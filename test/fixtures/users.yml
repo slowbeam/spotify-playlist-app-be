@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  spotify_url: MyString
+  href: MyString
+  uri: MyString
+  access_token: MyString
+  refresh_token: MyString
+  logged_in: false
+
+two:
+  spotify_url: MyString
+  href: MyString
+  uri: MyString
+  access_token: MyString
+  refresh_token: MyString
+  logged_in: false
