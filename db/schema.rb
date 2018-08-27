@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_27_142329) do
+ActiveRecord::Schema.define(version: 2018_08_27_170449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,9 @@ ActiveRecord::Schema.define(version: 2018_08_27_142329) do
     t.boolean "logged_in"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "username"
+    t.string "profile_image"
+    t.string "display_name"
   end
 
   add_foreign_key "song_users", "songs"
