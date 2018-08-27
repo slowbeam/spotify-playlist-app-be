@@ -5,7 +5,9 @@ Rails.application.routes.draw do
       resources :users, only: [:index]
       resources :song_users, only: [:index]
       resources :login, only: [:index]
+      resources :genres, only: [:index]
       get 'logging-in', :to => 'users#create'
+      get 'load-genres', :to => 'genres#create'
     end
   end
 end

@@ -2,7 +2,6 @@ class Api::V1::SpotifyController < ApplicationController
   before_action :set_user, only: [:recommendation]
 
   def recommendation
-    
 
   end
 
