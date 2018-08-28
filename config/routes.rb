@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :song_users, only: [:index]
       resources :login, only: [:index]
       resources :genres, only: [:index]
+      resources :moods, only: [:index]
       get 'logging-in', :to => 'users#create'
       get 'load-genres', :to => 'genres#create'
       get 'search', :to => 'spotify#search'

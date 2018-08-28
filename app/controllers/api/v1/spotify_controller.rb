@@ -14,11 +14,11 @@ class Api::V1::SpotifyController < ApplicationController
     when 'content'
       valence_min = 0.40
       valence_max = 0.60
-      seed_genres = "acoustic, edm, electronic, indie, pop"
+      seed_genres = "acoustic, electronic, indie, pop"
     when 'ecstatic'
-      valence_min = 0.85
-      valence_max = 1.00
-      seed_genres = "edm, dance, electro, pop, party"
+      valence_min = 0.6
+      valence_max = 1.0
+      seed_genres = "pop, electronic, dance"
     end
 
 
@@ -29,8 +29,8 @@ class Api::V1::SpotifyController < ApplicationController
     }
 
     query_params = {
-      max_valence: valence_max,
       min_valence: valence_min,
+      max_valence: valence_max,
       limit: 30,
       seed_genres: seed_genres
     }
@@ -53,7 +53,7 @@ class Api::V1::SpotifyController < ApplicationController
 
       currentSong = Song.find_or_create_by(artist: track["artists"][0]["name"], title: track["name"], album_cover: track["album"]["images"][1]["url"], spotify_id: track["id"], uri: track["uri"])
 
-      SongUser.find_or_create_by(user_id: @@current_user.id, song_id: currentSong.id)
+      Mood.find_or_create_by(name: @@current_user.username + " " + search_mood, user_id: @@current_user.id, song_id: currentSong.id)
 
     end
 
