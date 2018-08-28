@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_27_170449) do
+ActiveRecord::Schema.define(version: 2018_08_28_135147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,15 +30,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_170449) do
     t.string "album_cover"
     t.string "release_date"
     t.string "uri"
-    t.integer "popularity"
     t.string "spotify_id"
-    t.float "danceability"
-    t.float "energy"
-    t.integer "key"
-    t.float "loudness"
-    t.float "instrumentalness"
-    t.float "valence"
-    t.float "tempo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
