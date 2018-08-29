@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_28_165047) do
+ActiveRecord::Schema.define(version: 2018_08_29_194438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,9 @@ ActiveRecord::Schema.define(version: 2018_08_28_165047) do
     t.string "username"
     t.string "profile_image"
     t.string "display_name"
+    t.string "sadlist_uri"
+    t.string "contentlist_uri"
+    t.string "ecstaticlist_uri"
   end
 
   add_foreign_key "moods", "songs"
