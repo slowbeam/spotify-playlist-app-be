@@ -115,7 +115,14 @@ class Api::V1::SpotifyController < ApplicationController
     playlist_data = JSON.parse(add_songs_to_playlist_response.body)
 
 
-    redirect_to "http://localhost:3001/"
+    case ENV["SEARCH_MOOD"]
+      when 'sad'
+        redirect_to "http://localhost:3001/create-sad-vibelist"
+      when 'content'
+        redirect_to "http://localhost:3001/create-content-vibelist"
+      when 'ecstatic'
+        redirect_to "http://localhost:3001/create-ecstatic-vibelist"
+    end
 
   end
 
