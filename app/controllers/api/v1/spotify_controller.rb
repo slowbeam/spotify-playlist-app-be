@@ -1,6 +1,6 @@
 class Api::V1::SpotifyController < ApplicationController
   before_action :set_user, only: [:search, :create_playlist]
-  before_action :refresh_token, only: [:search]
+  before_action :refresh_token, only: [:search, :create_playlist]
 
 
   def search
