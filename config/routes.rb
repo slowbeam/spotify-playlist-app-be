@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get 'load-genres', :to => 'genres#create'
       get 'search', :to => 'spotify#search'
       get 'create-playlist', :to => 'spotify#create_playlist'
+      get 'logout', :to => "users#logout"
     end
   end
 end
