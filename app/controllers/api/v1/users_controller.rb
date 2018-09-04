@@ -1,4 +1,5 @@
 class Api::V1::UsersController < ApplicationController
+skip_before_action :authorized, only: [:create]
 
   def index
     @users = User.all
@@ -15,8 +16,8 @@ class Api::V1::UsersController < ApplicationController
         grant_type: "authorization_code",
         code: params[:code],
         redirect_uri: 'http://localhost:3000/api/v1/logging-in',
-        client_id: 'd9dbfa9ebabf431081a7d8c7df553196',
-        client_secret: 'b1744cbd42244ac681a388e02371ed63'
+        client_id: ENV['CLIENT_ID'],
+        client_secret: ENV['CLIENT_SECRET']
       }
       auth_response = RestClient.post('https://accounts.spotify.com/api/token', body)
 
@@ -29,31 +30,32 @@ class Api::V1::UsersController < ApplicationController
 
       user_params = JSON.parse(user_response.body)
 
-      @user = User.find_or_create_by(username: user_params["id"],
-                          spotify_url: user_params["external_urls"]["spotify"],
-                          href: user_params["href"],
-                          uri: user_params["uri"],
-                          profile_image: user_params["images"][0]["url"],
-                          display_name: user_params["display_name"])
+      @user = User.find_or_create_by(
+        username: user_params["id"],
+        spotify_url: user_params["external_urls"]["spotify"],
+        href: user_params["href"],
+        uri: user_params["uri"],
+        profile_image: user_params["images"][0]["url"],
+        display_name: user_params["display_name"])
       @user.update(access_token: auth_params["access_token"], refresh_token: auth_params["refresh_token"])
 
-      User.update_all(logged_in: false)
+      token = encode_token(user_id: @user.id)
 
-      @user.update(logged_in: true)
+      response_query_params = {
+        jwt: token,
+        username: @user.username,
+        display_name: @user.display_name,
+        profile_image: @user.profile_image,
+        sadlist_uri: @user.sadlist_uri,
+        contentlist_uri: @user.contentlist_uri,
+        ecstaticlist_uri: @user.ecstaticlist_uri
 
-      ENV["CURRENT_USER_ID"] = @user.id.to_s
+      }
 
-      ENV["SPOTIFY_USER_ID"] = @user.username
+      url = "http://localhost:3001/welcome"
 
-      redirect_to "http://localhost:3001/welcome"
+      redirect_to "#{url}?#{response_query_params.to_query}"
     end
-
-  end
-
-  def logout
-    User.update_all(logged_in: false)
-
-    redirect_to "http://localhost:3001/"
   end
 
 

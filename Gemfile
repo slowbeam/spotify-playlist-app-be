@@ -53,3 +53,5 @@ gem 'rspotify'
 gem 'pry'
 
 gem 'figaro'
+
+gem 'jwt'
