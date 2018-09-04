@@ -1,7 +1,7 @@
 class Api::V1::SpotifyController < ApplicationController
-  before_action :set_user, only: [:search, :create_playlist]
+  before_action :set_user, only: [:search, :create_playlist, :refresh_token]
   before_action :refresh_token, only: [:search, :create_playlist]
-
+  skip_before_action :authorized, only: [:search, :create_playlist]
 
   def search
 
@@ -128,8 +128,6 @@ class Api::V1::SpotifyController < ApplicationController
 
   def refresh_token
 
-    @@current_user = User.find(ENV["CURRENT_USER_ID"].to_i)
-
     if @@current_user.access_token_expired?
     #Request a new access token using refresh token
     #Create body of request
@@ -152,11 +150,20 @@ class Api::V1::SpotifyController < ApplicationController
   private
 
   def set_user
-    @@current_user = User.find(ENV["CURRENT_USER_ID"].to_i)
+    token = search_params["jwt"]
+    begin
+      tokenObj = JWT.decode(token, ENV['SECRET'], true, algorithm: 'HS256')
+    rescue JWT::DecodeError
+      [{}]
+    end
+
+    user_id = tokenObj[0]["user_id"]
+
+    @@current_user = User.find(user_id)
   end
 
   def search_params
-    params.permit(:mood)
+    params.permit(:mood, :jwt)
   end
 
 end

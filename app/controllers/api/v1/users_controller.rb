@@ -48,8 +48,8 @@ skip_before_action :authorized, only: [:create]
         profile_image: @user.profile_image,
         sadlist_uri: @user.sadlist_uri,
         contentlist_uri: @user.contentlist_uri,
-        ecstaticlist_uri: @user.ecstaticlist_uri
-
+        ecstaticlist_uri: @user.ecstaticlist_uri,
+        access_token: @user.access_token
       }
 
       url = "http://localhost:3001/welcome"
