@@ -36,7 +36,8 @@ skip_before_action :authorized, only: [:create]
         href: user_params["href"],
         uri: user_params["uri"],
         profile_image: user_params["images"][0]["url"],
-        display_name: user_params["display_name"])
+        display_name: user_params["display_name"]
+      )
       @user.update(access_token: auth_params["access_token"], refresh_token: auth_params["refresh_token"])
 
       token = encode_token(user_id: @user.id)

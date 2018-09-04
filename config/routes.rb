@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       get 'search', :to => 'spotify#search'
       get 'create-playlist', :to => 'spotify#create_playlist'
       get 'logout', :to => "users#logout"
-      get 'logged-in-user', :to => "users#logged_in_user"
+      post 'logged-in-user', :to => "users#logged_in_user"
     end
   end
 end
