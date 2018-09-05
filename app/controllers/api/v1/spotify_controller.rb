@@ -116,28 +116,33 @@ class Api::V1::SpotifyController < ApplicationController
 
     case ENV["SEARCH_MOOD"]
       when 'sad'
-        redirect_to "http://localhost:3001/create-sad-vibelist"
+        redirect_to "http://localhost:3001/create-sad-vibelist?uri=" + @current_user.sadlist_uri
       when 'content'
-        redirect_to "http://localhost:3001/create-content-vibelist"
+        redirect_to "http://localhost:3001/create-content-vibelist?uri=" + @current_user.contentlist_uri
       when 'ecstatic'
-        redirect_to "http://localhost:3001/create-ecstatic-vibelist"
+        redirect_to "http://localhost:3001/create-ecstatic-vibelist?uri=" + @current_user.ecstaticlist_uri
     end
 
   end
 
   def refresh_token
 
+    url = "https://accounts.spotify.com/api/token"
+
     if @current_user.access_token_expired?
     #Request a new access token using refresh token
     #Create body of request
-    body = {
-      grant_type: "refresh_token",
-      refresh_token: @current_user.refresh_token,
-      client_id: 'c4b56144ef3d453581292c34d556ce35',
-      client_secret: 'e486d8b9155149b1a8cae370b5091849'
+
+    enc =
+    Base64.encode64('c4b56144ef3d453581292c34d556ce35:e486d8b9155149b1a8cae370b5091849')
+
+    header = {
+      Authorization: "Basic #{enc}"
     }
 
-    auth_response = RestClient.post('https://accounts.spotify.com/api/token', body)
+    body = { grant_type: "refresh_token", refresh_token: "#{@current_user["refresh_token"]}"}
+
+    auth_response = RestClient.post(url, body.to_json, header)
 
     auth_params = JSON.parse(auth_response)
     @current_user.update(access_token: auth_params["access_token"])
