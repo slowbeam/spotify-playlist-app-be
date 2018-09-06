@@ -95,7 +95,7 @@ class Api::V1::SpotifyController < ApplicationController
         @current_user.update(sadlist_uri: playlist_data["uri"])
       when 'content'
         @current_user.update(contentlist_uri: playlist_data["uri"])
-      when 'ecstaticlist_uri'
+      when 'ecstatic'
         @current_user.update(ecstaticlist_uri: playlist_data["uri"])
     end
 
