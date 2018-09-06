@@ -7,19 +7,47 @@ class Api::V1::SpotifyController < ApplicationController
 
     ENV["SEARCH_MOOD"] = search_params["mood"]
 
+    @genre_one = search_params["genreone"]
+    @genre_two = search_params["genretwo"]
+    @genre_three = search_params["genrethree"]
+
     case ENV["SEARCH_MOOD"]
     when 'sad'
       valence_min = 0.00
       valence_max = 0.10
-      seed_genres = "emo, sad, soul, folk, rainy-day"
+      if @genre_one != "" && @genre_two != "" && @genre_three != ""
+        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_two}"
+      elsif @genre_one != "" && @genre_two != ""
+        seed_genres = "#{@genre_one}, #{@genre_two}"
+      elsif @genre_one != ""
+        seed_genres = "#{@genre_one}"
+      else
+        seed_genres = "emo, sad, soul, folk, rainy-day"
+      end
     when 'content'
       valence_min = 0.40
       valence_max = 0.60
-      seed_genres = "acoustic, electronic, indie, pop"
+      if @genre_one != "" && @genre_two != "" && @genre_three != ""
+        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_two}"
+      elsif @genre_one != "" && @genre_two != ""
+        seed_genres = "#{@genre_one}, #{@genre_two}"
+      elsif @genre_one != ""
+        seed_genres = "#{@genre_one}"
+      else
+        seed_genres = "acoustic, electronic, indie, pop"
+      end
     when 'ecstatic'
       valence_min = 0.6
       valence_max = 1.0
+      if @genre_one != "" && @genre_two != "" && @genre_three != ""
+        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_two}"
+      elsif @genre_one != "" && @genre_two != ""
+        seed_genres = "#{@genre_one}, #{@genre_two}"
+      elsif @genre_one != ""
+        seed_genres = "#{@genre_one}"
+      else
       seed_genres = "pop, electronic, dance"
+      end
     end
 
 
@@ -167,7 +195,7 @@ class Api::V1::SpotifyController < ApplicationController
   end
 
   def search_params
-    params.permit(:mood, :jwt)
+    params.permit(:mood, :jwt, :genreone, :genretwo, :genrethree )
   end
 
 end
