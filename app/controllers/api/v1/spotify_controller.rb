@@ -11,15 +11,17 @@ class Api::V1::SpotifyController < ApplicationController
     @genre_two = search_params["genretwo"]
     @genre_three = search_params["genrethree"]
 
+
+
     case ENV["SEARCH_MOOD"]
     when 'sad'
       valence_min = 0.00
       valence_max = 0.10
-      if @genre_one != "" && @genre_two != "" && @genre_three != ""
-        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_two}"
-      elsif @genre_one != "" && @genre_two != ""
+      if @genre_one != nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
+      elsif @genre_one != nil && @genre_two != nil
         seed_genres = "#{@genre_one}, #{@genre_two}"
-      elsif @genre_one != ""
+      elsif @genre_one != nil
         seed_genres = "#{@genre_one}"
       else
         seed_genres = "emo, sad, soul, folk, rainy-day"
@@ -27,11 +29,11 @@ class Api::V1::SpotifyController < ApplicationController
     when 'content'
       valence_min = 0.40
       valence_max = 0.60
-      if @genre_one != "" && @genre_two != "" && @genre_three != ""
-        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_two}"
-      elsif @genre_one != "" && @genre_two != ""
+      if @genre_one != nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
+      elsif @genre_one != nil && @genre_two != nil
         seed_genres = "#{@genre_one}, #{@genre_two}"
-      elsif @genre_one != ""
+      elsif @genre_one != nil
         seed_genres = "#{@genre_one}"
       else
         seed_genres = "acoustic, electronic, indie, pop"
@@ -39,11 +41,11 @@ class Api::V1::SpotifyController < ApplicationController
     when 'ecstatic'
       valence_min = 0.6
       valence_max = 1.0
-      if @genre_one != "" && @genre_two != "" && @genre_three != ""
-        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_two}"
-      elsif @genre_one != "" && @genre_two != ""
+      if @genre_one != nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
+      elsif @genre_one != nil && @genre_two != nil
         seed_genres = "#{@genre_one}, #{@genre_two}"
-      elsif @genre_one != ""
+      elsif @genre_one != nil
         seed_genres = "#{@genre_one}"
       else
       seed_genres = "pop, electronic, dance"
