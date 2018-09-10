@@ -74,6 +74,12 @@ class Api::V1::SpotifyController < ApplicationController
 
     ENV["CURRENT_PLAYLIST"] = ""
 
+    if Mood.last
+    mood_list_id = Mood.last.mood_list_id + 1
+    else
+      mood_list_id = 0
+    end
+
     search_data["tracks"].each do |track|
 
       if ENV["CURRENT_PLAYLIST"].length === 0
@@ -84,7 +90,7 @@ class Api::V1::SpotifyController < ApplicationController
 
       currentSong = Song.find_or_create_by(artist: track["artists"][0]["name"], title: track["name"], album_cover: track["album"]["images"][1]["url"], spotify_id: track["id"], uri: track["uri"])
 
-      Mood.find_or_create_by(name: @current_user.username + " " + ENV["SEARCH_MOOD"], user_id: @current_user.id, song_id: currentSong.id)
+      Mood.find_or_create_by(name: @current_user.username + " " + ENV["SEARCH_MOOD"], user_id: @current_user.id, song_id: currentSong.id, mood_list_id: mood_list_id)
 
     end
 
