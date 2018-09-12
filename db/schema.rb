@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_10_175039) do
+ActiveRecord::Schema.define(version: 2018_09_12_193222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,8 +22,21 @@ ActiveRecord::Schema.define(version: 2018_09_10_175039) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "mood_list_id"
+    t.string "playlist_uri"
+    t.boolean "saved"
     t.index ["song_id"], name: "index_moods_on_song_id"
     t.index ["user_id"], name: "index_moods_on_user_id"
+  end
+
+  create_table "saved_playlists", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "song_id"
+    t.integer "playlist_id"
+    t.string "playlist_uri"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["song_id"], name: "index_saved_playlists_on_song_id"
+    t.index ["user_id"], name: "index_saved_playlists_on_user_id"
   end
 
   create_table "song_users", force: :cascade do |t|
@@ -65,6 +78,8 @@ ActiveRecord::Schema.define(version: 2018_09_10_175039) do
 
   add_foreign_key "moods", "songs"
   add_foreign_key "moods", "users"
+  add_foreign_key "saved_playlists", "songs"
+  add_foreign_key "saved_playlists", "users"
   add_foreign_key "song_users", "songs"
   add_foreign_key "song_users", "users"
 end
