@@ -87,7 +87,8 @@ class Api::V1::SpotifyController < ApplicationController
       min_valence: valence_min,
       max_valence: valence_max,
       limit: 30,
-      seed_genres: seed_genres
+      seed_genres: seed_genres,
+      market: 'from_token'
     }
 
     fetchUrl ="#{url}?#{query_params.to_query}"
