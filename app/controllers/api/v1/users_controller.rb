@@ -30,12 +30,16 @@ skip_before_action :authorized, only: [:create]
 
       user_params = JSON.parse(user_response.body)
 
+      if user_params["images"]
+        profile_pic = user_params["images"][0]["url"]
+      end
+
       @user = User.find_or_create_by(
         username: user_params["id"],
         spotify_url: user_params["external_urls"]["spotify"],
         href: user_params["href"],
         uri: user_params["uri"],
-        profile_image: user_params["images"][0]["url"],
+        profile_image: profile_pic,
         display_name: user_params["display_name"]
       )
       @user.update(access_token: auth_params["access_token"], refresh_token: auth_params["refresh_token"])

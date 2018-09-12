@@ -19,10 +19,18 @@ class Api::V1::SpotifyController < ApplicationController
       valence_max = 0.10
       if @genre_one != nil && @genre_two != nil && @genre_three != nil
         seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
-      elsif @genre_one != nil && @genre_two != nil
+      elsif @genre_one != nil && @genre_two != nil && @genre_three == nil
         seed_genres = "#{@genre_one}, #{@genre_two}"
-      elsif @genre_one != nil
+      elsif @genre_one != nil && @genre_two == nil && @genre_three == nil
         seed_genres = "#{@genre_one}"
+      elsif @genre_one !=  nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_three}"
+      elsif @genre_one ==  nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_two}, #{@genre_three}"
+      elsif @genre_one == nil && @genre_two != nil && @genre_three == nil
+        seed_genres = "#{@genre_two}"
+      elsif @genre_one == nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_three}"
       else
         seed_genres = "emo, sad, soul, folk, rainy-day"
       end
@@ -31,10 +39,18 @@ class Api::V1::SpotifyController < ApplicationController
       valence_max = 0.60
       if @genre_one != nil && @genre_two != nil && @genre_three != nil
         seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
-      elsif @genre_one != nil && @genre_two != nil
+      elsif @genre_one != nil && @genre_two != nil && @genre_three == nil
         seed_genres = "#{@genre_one}, #{@genre_two}"
-      elsif @genre_one != nil
+      elsif @genre_one != nil && @genre_two == nil && @genre_three == nil
         seed_genres = "#{@genre_one}"
+      elsif @genre_one !=  nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_three}"
+      elsif @genre_one ==  nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_two}, #{@genre_three}"
+      elsif @genre_one == nil && @genre_two != nil && @genre_three == nil
+        seed_genres = "#{@genre_two}"
+      elsif @genre_one == nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_three}"
       else
         seed_genres = "acoustic, electronic, indie, pop"
       end
@@ -43,10 +59,18 @@ class Api::V1::SpotifyController < ApplicationController
       valence_max = 1.0
       if @genre_one != nil && @genre_two != nil && @genre_three != nil
         seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
-      elsif @genre_one != nil && @genre_two != nil
+      elsif @genre_one != nil && @genre_two != nil && @genre_three == nil
         seed_genres = "#{@genre_one}, #{@genre_two}"
-      elsif @genre_one != nil
+      elsif @genre_one != nil && @genre_two == nil && @genre_three == nil
         seed_genres = "#{@genre_one}"
+      elsif @genre_one !=  nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_three}"
+      elsif @genre_one ==  nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_two}, #{@genre_three}"
+      elsif @genre_one == nil && @genre_two != nil && @genre_three == nil
+        seed_genres = "#{@genre_two}"
+      elsif @genre_one == nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_three}"
       else
       seed_genres = "pop, electronic, dance"
       end
