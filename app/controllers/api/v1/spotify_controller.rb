@@ -141,8 +141,8 @@ class Api::V1::SpotifyController < ApplicationController
     }
 
     body = {
-      name: "My #{ENV["SEARCH_MOOD"]} vibelist",
-      description: "A playlist of #{ENV["SEARCH_MOOD"]} songs made with the vibeList app."
+      name: "my #{ENV["SEARCH_MOOD"]} vibelist",
+      description: "A playlist of #{ENV["SEARCH_MOOD"]} songs made with the vibelist app."
     }
 
     create_playlist_response = RestClient.post(url, body.to_json, header)
