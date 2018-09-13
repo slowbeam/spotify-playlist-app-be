@@ -140,9 +140,18 @@ class Api::V1::SpotifyController < ApplicationController
       "Content-Type": "application/json"
     }
 
+    case ENV["SEARCH_MOOD"]
+      when 'sad'
+        mood_word = 'sad'
+      when 'content'
+        mood_word = 'happy'
+      when 'ecstatic'
+        mood_word = 'super happy'
+    end
+
     body = {
-      name: "my #{ENV["SEARCH_MOOD"]} vibelist",
-      description: "A playlist of #{ENV["SEARCH_MOOD"]} songs made with the vibelist app."
+      name: "my #{mood_word} vibelist",
+      description: "A playlist of #{mood_word} songs made with the vibelist app."
     }
 
     create_playlist_response = RestClient.post(url, body.to_json, header)
@@ -159,10 +168,13 @@ class Api::V1::SpotifyController < ApplicationController
     case ENV["SEARCH_MOOD"]
       when 'sad'
         @current_user.update(sadlist_uri: playlist_data["uri"])
+        mood_word = 'sad'
       when 'content'
         @current_user.update(contentlist_uri: playlist_data["uri"])
+        mood_word = 'happy'
       when 'ecstatic'
         @current_user.update(ecstaticlist_uri: playlist_data["uri"])
+        mood_word = 'super happy'
     end
 
     ENV["PLAYLIST_ID"] = playlist_data["id"]
