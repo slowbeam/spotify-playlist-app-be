@@ -5,7 +5,7 @@ class Api::V1::SpotifyController < ApplicationController
 
   def search
 
-    ENV["SEARCH_MOOD"] = search_params["mood"]
+    @mood = search_params["mood"]
 
     @genre_one = search_params["genreone"]
     @genre_two = search_params["genretwo"]
@@ -13,10 +13,10 @@ class Api::V1::SpotifyController < ApplicationController
 
 
 
-    case ENV["SEARCH_MOOD"]
+    case @mood
     when 'sad'
       valence_min = 0.00
-      valence_max = 0.10
+      valence_max = 0.20
       if @genre_one != nil && @genre_two != nil && @genre_three != nil
         seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
       elsif @genre_one != nil && @genre_two != nil && @genre_three == nil
@@ -97,7 +97,7 @@ class Api::V1::SpotifyController < ApplicationController
 
     search_data = JSON.parse(search_get_response.body)
 
-    ENV["CURRENT_PLAYLIST"] = ""
+    @current_playlist = ""
 
     if @current_user.moods.last
     mood_list_id = @current_user.moods.last.mood_list_id + 1
@@ -107,25 +107,30 @@ class Api::V1::SpotifyController < ApplicationController
 
     search_data["tracks"].each do |track|
 
-      if ENV["CURRENT_PLAYLIST"].length === 0
-        ENV["CURRENT_PLAYLIST"] += track["uri"]
-      elsif ENV["CURRENT_PLAYLIST"].length > 0
-        ENV["CURRENT_PLAYLIST"] += ", " + track["uri"]
+      if @current_playlist.length === 0
+        @current_playlist += track["uri"]
+      elsif @current_playlist.length > 0
+        @current_playlist += ", " + track["uri"]
       end
 
       currentSong = Song.find_or_create_by(artist: track["artists"][0]["name"], title: track["name"], album_cover: track["album"]["images"][1]["url"], spotify_id: track["id"], uri: track["uri"])
 
-      Mood.find_or_create_by(name: @current_user.username + " " + ENV["SEARCH_MOOD"], user_id: @current_user.id, song_id: currentSong.id, mood_list_id: mood_list_id, saved: false)
+      Mood.find_or_create_by(name: @current_user.username + " " + @mood, user_id: @current_user.id, song_id: currentSong.id, mood_list_id: mood_list_id, saved: false)
 
     end
 
-    case ENV["SEARCH_MOOD"]
+    response_query_data = {
+      mood: @mood,
+      playlist_uris: @current_playlist
+    }
+
+    case @mood
       when 'sad'
-        redirect_to "http://localhost:3001/create-sad-vibelist"
+        redirect_to "http://localhost:3001/create-sad-vibelist?" + response_query_data.to_query
       when 'content'
-        redirect_to "http://localhost:3001/create-content-vibelist"
+        redirect_to "http://localhost:3001/create-content-vibelist?" + response_query_data.to_query
       when 'ecstatic'
-        redirect_to "http://localhost:3001/create-ecstatic-vibelist"
+        redirect_to "http://localhost:3001/create-ecstatic-vibelist?" + response_query_data.to_query
     end
 
   end
