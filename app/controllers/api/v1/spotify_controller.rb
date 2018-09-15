@@ -121,7 +121,7 @@ class Api::V1::SpotifyController < ApplicationController
 
     response_query_data = {
       mood: @mood,
-      playlist_uris: @current_playlist
+      playlist_uris_string: @current_playlist
     }
 
     case @mood
@@ -136,16 +136,22 @@ class Api::V1::SpotifyController < ApplicationController
   end
 
   def create_playlist
-    @@spotify_user_id = @current_user["username"]
 
-    url = "https://api.spotify.com/v1/users/#{@@spotify_user_id}/playlists"
+    @playlist_uris_string = search_params[:playlist_uris_string]
+
+
+    current_mood = search_params[:mood]
+
+    @spotify_user_id = @current_user["username"]
+
+    url = "https://api.spotify.com/v1/users/#{@spotify_user_id}/playlists"
 
     header = {
       Authorization: "Bearer #{@current_user["access_token"]}",
       "Content-Type": "application/json"
     }
 
-    case ENV["SEARCH_MOOD"]
+    case current_mood
       when 'sad'
         mood_word = 'sad'
       when 'content'
@@ -163,30 +169,27 @@ class Api::V1::SpotifyController < ApplicationController
 
     playlist_data = JSON.parse(create_playlist_response.body)
 
-    ENV["PLAYLIST_URI"] = playlist_data["uri"]
+    @playlist_uri = playlist_data["uri"]
 
     mood_list_id = @current_user.moods.last.mood_list_id
     moodNow = @current_user.moods.last
     Mood.where(mood_list_id: mood_list_id).update_all("playlist_uri = '#{playlist_data["uri"]}'")
     Mood.where(mood_list_id: mood_list_id).update_all("saved = true")
 
-    case ENV["SEARCH_MOOD"]
+    case current_mood
       when 'sad'
-        @current_user.update(sadlist_uri: playlist_data["uri"])
         mood_word = 'sad'
       when 'content'
-        @current_user.update(contentlist_uri: playlist_data["uri"])
         mood_word = 'happy'
       when 'ecstatic'
-        @current_user.update(ecstaticlist_uri: playlist_data["uri"])
         mood_word = 'super happy'
     end
 
-    ENV["PLAYLIST_ID"] = playlist_data["id"]
+    playlist_id = playlist_data["id"]
 
-    add_songs_url = "https://api.spotify.com/v1/playlists/" +ENV["PLAYLIST_ID"] +"/tracks"
+    add_songs_url = "https://api.spotify.com/v1/playlists/" + playlist_id +"/tracks"
 
-    playlist_uri_array = ENV["CURRENT_PLAYLIST"].split(/\s*,\s*/)
+    playlist_uri_array = @playlist_uris_string.split(", ")
 
     add_songs_body = {
       uris: playlist_uri_array
@@ -197,13 +200,14 @@ class Api::V1::SpotifyController < ApplicationController
     playlist_data = JSON.parse(add_songs_to_playlist_response.body)
 
 
-    case ENV["SEARCH_MOOD"]
+    case current_mood
       when 'sad'
-        redirect_to "http://localhost:3001/create-sad-vibelist?uri=" + @current_user.sadlist_uri
+        redirect_to "http://localhost:3001/create-sad-vibelist?mood=" + current_mood +
+        "&uri=" + @playlist_uri
       when 'content'
-        redirect_to "http://localhost:3001/create-content-vibelist?uri=" + @current_user.contentlist_uri
+        redirect_to "http://localhost:3001/create-content-vibelist?mood=" + current_mood + "&uri=" + @playlist_uri
       when 'ecstatic'
-        redirect_to "http://localhost:3001/create-ecstatic-vibelist?uri=" + @current_user.ecstaticlist_uri
+        redirect_to "http://localhost:3001/create-ecstatic-vibelist?mood=" + current_mood + "&uri=" + @playlist_uri
     end
 
   end
@@ -250,7 +254,7 @@ class Api::V1::SpotifyController < ApplicationController
   end
 
   def search_params
-    params.permit(:mood, :jwt, :genreone, :genretwo, :genrethree )
+    params.permit(:mood, :jwt, :genreone, :genretwo, :genrethree, :playlist_uris_string)
   end
 
 end
