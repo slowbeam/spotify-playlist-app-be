@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  default_scope { order('id ASC') }
   has_many :moods
   has_many :songs, through: :moods
   has_many :saved_playlists

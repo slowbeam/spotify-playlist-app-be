@@ -124,6 +124,8 @@ class Api::V1::SpotifyController < ApplicationController
       playlist_uris_string: @current_playlist
     }
 
+    response_query_version = response_query_data.to_query
+
     case @mood
       when 'sad'
         redirect_to "http://localhost:3001/create-sad-vibelist?" + response_query_data.to_query
@@ -172,8 +174,8 @@ class Api::V1::SpotifyController < ApplicationController
     @playlist_uri = playlist_data["uri"]
 
     mood_list_id = @current_user.moods.last.mood_list_id
-    moodNow = @current_user.moods.last
-    Mood.where(mood_list_id: mood_list_id).update_all("playlist_uri = '#{playlist_data["uri"]}'")
+    
+    Mood.where(mood_list_id: mood_list_id).update_all("playlist_uri = '#{@playlist_uri}'")
     Mood.where(mood_list_id: mood_list_id).update_all("saved = true")
 
     case current_mood
