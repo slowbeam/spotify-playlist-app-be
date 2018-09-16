@@ -1,9 +1,6 @@
 class Api::V1::LoginController < ApplicationController
 skip_before_action :authorized, only: [:index]
 
-  ENV['CLIENT_ID'] = 'd9dbfa9ebabf431081a7d8c7df553196'
-
-  ENV['CLIENT_SECRET'] = 'b1744cbd42244ac681a388e02371ed63'
 
   def index
 
