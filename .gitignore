@@ -23,4 +23,4 @@
 /config/master.key
 
 $ Ignore  environment file
-./config/environment.rb
+/config/environment.rb
