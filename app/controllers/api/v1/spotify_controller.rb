@@ -174,7 +174,7 @@ class Api::V1::SpotifyController < ApplicationController
     @playlist_uri = playlist_data["uri"]
 
     mood_list_id = @current_user.moods.last.mood_list_id
-    
+
     Mood.where(mood_list_id: mood_list_id).update_all("playlist_uri = '#{@playlist_uri}'")
     Mood.where(mood_list_id: mood_list_id).update_all("saved = true")
 
@@ -221,17 +221,23 @@ class Api::V1::SpotifyController < ApplicationController
     if @current_user.access_token_expired?
     #Request a new access token using refresh token
     #Create body of request
+    refresh_token = @current_user['refresh_token']
 
-    enc =
-    Base64.encode64('c4b56144ef3d453581292c34d556ce35:e486d8b9155149b1a8cae370b5091849')
+    stringToEncode = ENV['CLIENT_ID'] + ":" + ENV["CLIENT_SECRET"]
+
+    enc = Base64.strict_encode64(stringToEncode)
 
     header = {
-      Authorization: "Basic #{enc}"
+      'Authorization': "Basic #{enc}",
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
 
-    body = { grant_type: "refresh_token", refresh_token: "#{@current_user["refresh_token"]}"}
+    body = {
+      'grant_type': "refresh_token",
+      'refresh_token': refresh_token
+    }
 
-    auth_response = RestClient.post(url, body.to_json, header)
+    auth_response = RestClient.post(url, body, header)
 
     auth_params = JSON.parse(auth_response)
     @current_user.update(access_token: auth_params["access_token"])
