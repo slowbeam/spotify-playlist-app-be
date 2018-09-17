@@ -57,7 +57,7 @@ skip_before_action :authorized, only: [:create]
         t: @user.access_token
       }
 
-      url = "https://vibelist-client.herokuapp.com/welcome"
+      url = "https://vibelist.co/welcome"
 
       redirect_to "#{url}?#{response_query_params.to_query}"
     end
