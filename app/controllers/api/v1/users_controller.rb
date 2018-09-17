@@ -10,7 +10,7 @@ skip_before_action :authorized, only: [:create]
     if params[:error]
 
       puts 'LOGIN ERROR', params
-      redirect_to 'http://localhost:3001'
+      redirect_to 'http://www.vibelist.co'
     else
       body = {
         grant_type: "authorization_code",
