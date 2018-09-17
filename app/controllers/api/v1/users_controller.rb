@@ -10,7 +10,7 @@ skip_before_action :authorized, only: [:create]
     if params[:error]
 
       puts 'LOGIN ERROR', params
-      redirect_to 'https://vibelist-client.herokuapp.com/'
+      redirect_to 'https://vibelist.herokuapp.com/'
     else
       body = {
         grant_type: "authorization_code",
@@ -57,7 +57,7 @@ skip_before_action :authorized, only: [:create]
         t: @user.access_token
       }
 
-      url = "https://vibelist-client.herokuapp.com/welcome"
+      url = "https://vibelist.herokuapp.com/welcome"
 
       redirect_to "#{url}?#{response_query_params.to_query}"
     end
