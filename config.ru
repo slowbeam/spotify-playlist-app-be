@@ -10,7 +10,7 @@ use Rack::Cors do
 
   # allow all origins in development
   allow do
-    origins 'http://www.vibelist.co/'
+    origins '*'
     resource '*',
         :headers => :any,
         :methods => [:get, :post, :delete, :put, :options]
