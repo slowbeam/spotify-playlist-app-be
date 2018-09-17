@@ -128,11 +128,11 @@ class Api::V1::SpotifyController < ApplicationController
 
     case @mood
       when 'sad'
-        redirect_to "http://www.vibelist.co/create-sad-vibelist?" + response_query_data.to_query
+        redirect_to "https://vibelist-client.herokuapp.com//create-sad-vibelist?" + response_query_data.to_query
       when 'content'
-        redirect_to "http://www.vibelist.co/create-content-vibelist?" + response_query_data.to_query
+        redirect_to "https://vibelist-client.herokuapp.com//create-content-vibelist?" + response_query_data.to_query
       when 'ecstatic'
-        redirect_to "http://www.vibelist.co/create-ecstatic-vibelist?" + response_query_data.to_query
+        redirect_to "https://vibelist-client.herokuapp.com//create-ecstatic-vibelist?" + response_query_data.to_query
     end
 
   end
@@ -204,12 +204,12 @@ class Api::V1::SpotifyController < ApplicationController
 
     case current_mood
       when 'sad'
-        redirect_to "http://www.vibelist.co/create-sad-vibelist?mood=" + current_mood +
+        redirect_to "https://vibelist-client.herokuapp.com//create-sad-vibelist?mood=" + current_mood +
         "&uri=" + @playlist_uri
       when 'content'
-        redirect_to "http://www.vibelist.co/create-content-vibelist?mood=" + current_mood + "&uri=" + @playlist_uri
+        redirect_to "https://vibelist-client.herokuapp.com//create-content-vibelist?mood=" + current_mood + "&uri=" + @playlist_uri
       when 'ecstatic'
-        redirect_to "http://www.vibelist.co/create-ecstatic-vibelist?mood=" + current_mood + "&uri=" + @playlist_uri
+        redirect_to "https://vibelist-client.herokuapp.com//create-ecstatic-vibelist?mood=" + current_mood + "&uri=" + @playlist_uri
     end
 
   end
