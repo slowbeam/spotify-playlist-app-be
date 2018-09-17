@@ -33,7 +33,7 @@ module SpotifyPlaylistAppBe
 
     config.middleware.insert_before 0, Rack::Cors do
      allow do
-       origins 'http://vibelist.co/'
+       origins 'http://www.vibelist.co/'
        resource '*', headers: :any, methods: [:get, :post, :options]
      end
    end
