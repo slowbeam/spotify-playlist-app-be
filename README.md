@@ -17,9 +17,11 @@ bundle install
 
 ## Usage example
 
-Vibelist can play individual songs, or full playlists created with the app in the browser:
+Vibelist can create dynamic playlists through the user's selection of up to 3 genres and a mood:
 
 ![vibelist demo 2](https://media.giphy.com/media/WvvtNtiefZGD1I74aP/giphy.gif)
+
+Vibelist can play individual songs, or full playlists created with the app in the browser:
 
 ![vibelist demo 3](https://media.giphy.com/media/2uInVFNC4m77q6Lrge/giphy.gif)
 
