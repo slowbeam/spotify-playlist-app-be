@@ -5,6 +5,8 @@ Vibelist is powered by the Spotify web API and the Spotify Web Player SDK to pro
 
 Front end Javascript & React app repo available here: https://github.com/slowbeam/vibe-list-client
 
+##
+
 ![vibelist demo 1](https://media.giphy.com/media/41ey7D0UVpOibdPVEt/giphy.gif)
 
 ## Installation
