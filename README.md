@@ -7,7 +7,7 @@ Front end Javascript & React app repo available here: https://github.com/slowbea
 
 ##
 
-![vibelist demo 1](https://media.giphy.com/media/41ey7D0UVpOibdPVEt/giphy.gif)
+![vibelist demo 1](https://github.com/slowbeam/vibe-list-client/blob/master/public/demos/v-demo-1.gif)
 
 ## Installation
 
@@ -21,15 +21,15 @@ bundle install
 
 Vibelist can create dynamic playlists through the user's selection of up to 3 genres and a mood:
 
-![vibelist demo 2](https://media.giphy.com/media/WvvtNtiefZGD1I74aP/giphy.gif)
+![vibelist demo 2](https://github.com/slowbeam/vibe-list-client/blob/master/public/demos/v-demo-2.gif)
 
 Vibelist can play individual songs, or full playlists created with the app in the browser:
 
-![vibelist demo 3](https://media.giphy.com/media/2uInVFNC4m77q6Lrge/giphy.gif)
+![vibelist demo 3](https://github.com/slowbeam/vibe-list-client/blob/master/public/demos/v-demo-3.gif)
 
 Vibelist can save playlists to your Spotify account:
 
-![vibelist demo 4](https://media.giphy.com/media/1yLmZ4mGhpFxkm9SG9/giphy.gif)
+![vibelist demo 4](https://github.com/slowbeam/vibe-list-client/blob/master/public/demos/v-demo-4.gif)
 
 ## Development setup
 
