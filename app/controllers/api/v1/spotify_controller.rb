@@ -1,7 +1,132 @@
 class Api::V1::SpotifyController < ApplicationController
-  before_action :set_user, only: [:search, :create_playlist, :refresh_token]
+  before_action :set_user, only: [:search, :search_two, :create_playlist, :refresh_token]
   before_action :refresh_token, only: [:search, :create_playlist]
   skip_before_action :authorized, only: [:search, :create_playlist]
+
+  def search_two
+
+    @mood = search_params["mood"]
+
+    @genre_one = search_params["genreone"]
+    @genre_two = search_params["genretwo"]
+    @genre_three = search_params["genrethree"]
+
+    case @mood
+    when 'sad'
+      valence_min = 0.00
+      valence_max = 0.10
+      if @genre_one != nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
+      elsif @genre_one != nil && @genre_two != nil && @genre_three == nil
+        seed_genres = "#{@genre_one}, #{@genre_two}"
+      elsif @genre_one != nil && @genre_two == nil && @genre_three == nil
+        seed_genres = "#{@genre_one}"
+      elsif @genre_one !=  nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_three}"
+      elsif @genre_one ==  nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_two}, #{@genre_three}"
+      elsif @genre_one == nil && @genre_two != nil && @genre_three == nil
+        seed_genres = "#{@genre_two}"
+      elsif @genre_one == nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_three}"
+      else
+        seed_genres = "emo, sad, soul, folk, rainy-day"
+      end
+    when 'content'
+      valence_min = 0.40
+      valence_max = 0.60
+      if @genre_one != nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
+      elsif @genre_one != nil && @genre_two != nil && @genre_three == nil
+        seed_genres = "#{@genre_one}, #{@genre_two}"
+      elsif @genre_one != nil && @genre_two == nil && @genre_three == nil
+        seed_genres = "#{@genre_one}"
+      elsif @genre_one !=  nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_three}"
+      elsif @genre_one ==  nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_two}, #{@genre_three}"
+      elsif @genre_one == nil && @genre_two != nil && @genre_three == nil
+        seed_genres = "#{@genre_two}"
+      elsif @genre_one == nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_three}"
+      else
+        seed_genres = "acoustic, electronic, indie, pop"
+      end
+    when 'ecstatic'
+      valence_min = 0.6
+      valence_max = 1.0
+      if @genre_one != nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_two}, #{@genre_three}"
+      elsif @genre_one != nil && @genre_two != nil && @genre_three == nil
+        seed_genres = "#{@genre_one}, #{@genre_two}"
+      elsif @genre_one != nil && @genre_two == nil && @genre_three == nil
+        seed_genres = "#{@genre_one}"
+      elsif @genre_one !=  nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_one}, #{@genre_three}"
+      elsif @genre_one ==  nil && @genre_two != nil && @genre_three != nil
+        seed_genres = "#{@genre_two}, #{@genre_three}"
+      elsif @genre_one == nil && @genre_two != nil && @genre_three == nil
+        seed_genres = "#{@genre_two}"
+      elsif @genre_one == nil && @genre_two == nil && @genre_three != nil
+        seed_genres = "#{@genre_three}"
+      else
+      seed_genres = "pop, electronic, dance"
+      end
+    end
+
+
+    url = 'https://api.spotify.com/v1/recommendations'
+
+    header = {
+      Authorization: "Bearer #{@current_user["access_token"]}"
+    }
+
+    query_params = {
+      min_valence: valence_min,
+      max_valence: valence_max,
+      limit: 30,
+      seed_genres: seed_genres,
+      market: 'from_token'
+    }
+
+    fetchUrl ="#{url}?#{query_params.to_query}"
+
+    search_get_response = RestClient.get(fetchUrl, header)
+
+    search_data = JSON.parse(search_get_response.body)
+
+    @current_playlist = ""
+
+    if @current_user.moods.last
+    mood_list_id = @current_user.moods.last.mood_list_id + 1
+    else
+      mood_list_id = 0
+    end
+
+    search_data["tracks"].each do |track|
+
+      if @current_playlist.length === 0
+        @current_playlist += track["uri"]
+      elsif @current_playlist.length > 0
+        @current_playlist += ", " + track["uri"]
+      end
+
+      currentSong = Song.find_or_create_by(artist: track["artists"][0]["name"], title: track["name"], album_cover: track["album"]["images"][1]["url"], spotify_id: track["id"], uri: track["uri"])
+
+      @mood_list_id = mood_list_id
+
+      Mood.find_or_create_by(name: @current_user.username + " " + @mood, user_id: @current_user.id, song_id: currentSong.id, mood_list_id: mood_list_id, saved: false)
+
+    end
+
+    @response_data = {
+      mood: @mood,
+      mood_list_id: @mood_list_id,
+      playlist_uris: @current_playlist,
+    }
+
+    render json: @response_data
+  end
 
   def search
 
