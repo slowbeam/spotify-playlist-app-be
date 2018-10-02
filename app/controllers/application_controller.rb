@@ -11,11 +11,6 @@ class ApplicationController < ActionController::API
     request.headers["Authorization"]
   end
 
-  def current_mood
-    @mood = request.body["mood"]
-    binding.pry
-  end
-
   def decoded_token
     if auth_header
       token = auth_header.split(' ')[1]

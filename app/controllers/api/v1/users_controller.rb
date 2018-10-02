@@ -19,6 +19,8 @@ skip_before_action :authorized, only: [:create]
         client_id: ENV['CLIENT_ID'],
         client_secret: ENV['CLIENT_SECRET']
       }
+
+      binding.pry
       auth_response = RestClient.post('https://accounts.spotify.com/api/token', body)
 
       auth_params = JSON.parse(auth_response.body)

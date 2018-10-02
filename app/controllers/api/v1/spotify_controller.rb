@@ -4,7 +4,10 @@ class Api::V1::SpotifyController < ApplicationController
   skip_before_action :authorized, only: [:search, :create_playlist]
 
   def search_two
-    ENV["SEARCH_MOOD"] = search_params["mood"]
+
+    binding.pry
+
+    @mood = search_params["mood"]
 
     @genre_one = search_params["genreone"]
     @genre_two = search_params["genretwo"]
@@ -12,7 +15,7 @@ class Api::V1::SpotifyController < ApplicationController
 
 
 
-    case ENV["SEARCH_MOOD"]
+    case @mood
     when 'sad'
       valence_min = 0.00
       valence_max = 0.10
@@ -118,7 +121,7 @@ class Api::V1::SpotifyController < ApplicationController
 
     end
 
-    case ENV["SEARCH_MOOD"]
+    case @mood
       when 'sad'
         redirect_to "http://localhost:3001/create-sad-vibelist"
       when 'content'
