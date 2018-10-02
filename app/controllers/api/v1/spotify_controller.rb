@@ -122,10 +122,8 @@ class Api::V1::SpotifyController < ApplicationController
     @response_data = {
       mood: @mood,
       mood_list_id: @mood_list_id,
-      current_playlist: @current_playlist,
+      playlist_uris: @current_playlist,
     }
-
-    binding.pry
 
     render json: @response_data
   end
