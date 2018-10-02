@@ -1,19 +1,15 @@
 class Api::V1::SpotifyController < ApplicationController
-  before_action :set_user, only: [:search, :create_playlist, :refresh_token]
+  before_action :set_user, only: [:search, :search_two, :create_playlist, :refresh_token]
   before_action :refresh_token, only: [:search, :create_playlist]
   skip_before_action :authorized, only: [:search, :create_playlist]
 
   def search_two
-
-    binding.pry
 
     @mood = search_params["mood"]
 
     @genre_one = search_params["genreone"]
     @genre_two = search_params["genretwo"]
     @genre_three = search_params["genrethree"]
-
-
 
     case @mood
     when 'sad'
@@ -99,7 +95,7 @@ class Api::V1::SpotifyController < ApplicationController
 
     search_data = JSON.parse(search_get_response.body)
 
-    ENV["CURRENT_PLAYLIST"] = ""
+    @current_playlist = ""
 
     if @current_user.moods.last
     mood_list_id = @current_user.moods.last.mood_list_id + 1
@@ -109,26 +105,29 @@ class Api::V1::SpotifyController < ApplicationController
 
     search_data["tracks"].each do |track|
 
-      if ENV["CURRENT_PLAYLIST"].length === 0
-        ENV["CURRENT_PLAYLIST"] += track["uri"]
-      elsif ENV["CURRENT_PLAYLIST"].length > 0
-        ENV["CURRENT_PLAYLIST"] += ", " + track["uri"]
+      if @current_playlist.length === 0
+        @current_playlist += track["uri"]
+      elsif @current_playlist.length > 0
+        @current_playlist += ", " + track["uri"]
       end
 
       currentSong = Song.find_or_create_by(artist: track["artists"][0]["name"], title: track["name"], album_cover: track["album"]["images"][1]["url"], spotify_id: track["id"], uri: track["uri"])
 
-      Mood.find_or_create_by(name: @current_user.username + " " + ENV["SEARCH_MOOD"], user_id: @current_user.id, song_id: currentSong.id, mood_list_id: mood_list_id, saved: false)
+      @mood_list_id = mood_list_id
+
+      Mood.find_or_create_by(name: @current_user.username + " " + @mood, user_id: @current_user.id, song_id: currentSong.id, mood_list_id: mood_list_id, saved: false)
 
     end
 
-    case @mood
-      when 'sad'
-        redirect_to "http://localhost:3001/create-sad-vibelist"
-      when 'content'
-        redirect_to "http://localhost:3001/create-content-vibelist"
-      when 'ecstatic'
-        redirect_to "http://localhost:3001/create-ecstatic-vibelist"
-    end
+    @response_data = {
+      mood: @mood,
+      mood_list_id: @mood_list_id,
+      current_playlist: @current_playlist,
+    }
+
+    binding.pry
+
+    render json: @response_data
   end
 
   def search
