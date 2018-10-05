@@ -1,5 +1,5 @@
 class Api::V1::SpotifyController < ApplicationController
-  before_action :set_user, only: [:search, :search_two, :create_playlist, :refresh_token]
+  before_action :set_user, only: [:search, :create_playlist, :refresh_token]
   before_action :refresh_token, only: [:search, :create_playlist]
   before_action :set_mood, only: [:search, :create_playlist_two]
   skip_before_action :authorized, only: [:search, :create_playlist]
@@ -130,7 +130,7 @@ class Api::V1::SpotifyController < ApplicationController
   def create_playlist_two
 
     @headers = request.headers
-    
+
     binding.pry
 
     @spotify_user_id = @current_user["username"]
@@ -308,16 +308,7 @@ class Api::V1::SpotifyController < ApplicationController
   private
 
   def set_user
-    token = search_params["jwt"]
-    begin
-      tokenObj = JWT.decode(token, ENV['SECRET'], true, algorithm: 'HS256')
-    rescue JWT::DecodeError
-      [{}]
-    end
-
-    user_id = tokenObj[0]["user_id"]
-
-    @current_user = User.find(user_id)
+    @current_user = self.current_user
   end
 
   def set_mood
@@ -325,7 +316,7 @@ class Api::V1::SpotifyController < ApplicationController
   end
 
   def search_params
-    params.permit(:mood, :jwt, :genreone, :genretwo, :genrethree )
+    params.permit(:mood, :genreone, :genretwo, :genrethree )
   end
 
 end
