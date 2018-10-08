@@ -131,7 +131,7 @@ class Api::V1::SpotifyController < ApplicationController
 
     @headers = request.headers
 
-    binding.pry
+    @playlist_uris = JSON.parse(request.body.read)["playlist_uris"]
 
     @spotify_user_id = @current_user["username"]
 
@@ -167,23 +167,11 @@ class Api::V1::SpotifyController < ApplicationController
     Mood.where(mood_list_id: mood_list_id).update_all("playlist_uri = '#{@playlist_uri}'")
     Mood.where(mood_list_id: mood_list_id).update_all("saved = true")
 
-    case @mood
-      when 'sad'
-        @current_user.update(sadlist_uri: @playlist_uri)
-        mood_word = 'sad'
-      when 'content'
-        @current_user.update(contentlist_uri: @playlist_uri)
-        mood_word = 'happy'
-      when 'ecstatic'
-        @current_user.update(ecstaticlist_uri: @playlist_uri)
-        mood_word = 'super happy'
-    end
-
     @playlist_id = playlist_data["id"]
 
     add_songs_url = "https://api.spotify.com/v1/playlists/" + @playlist_id +"/tracks"
 
-    playlist_uri_array = ENV["CURRENT_PLAYLIST"].split(/\s*,\s*/)
+    playlist_uri_array = @playlist_uris.split(/\s*,\s*/)
 
     add_songs_body = {
       uris: playlist_uri_array
@@ -193,15 +181,11 @@ class Api::V1::SpotifyController < ApplicationController
 
     playlist_data = JSON.parse(add_songs_to_playlist_response.body)
 
+    @response_data = {
+      playlist_uri: @playlist_uri
+    }
 
-    case ENV["SEARCH_MOOD"]
-      when 'sad'
-        redirect_to "http://localhost:3001/create-sad-vibelist?uri=" + @current_user.sadlist_uri
-      when 'content'
-        redirect_to "http://localhost:3001/create-content-vibelist?uri=" + @current_user.contentlist_uri
-      when 'ecstatic'
-        redirect_to "http://localhost:3001/create-ecstatic-vibelist?uri=" + @current_user.ecstaticlist_uri
-    end
+    render json: @response_data
 
   end
 
