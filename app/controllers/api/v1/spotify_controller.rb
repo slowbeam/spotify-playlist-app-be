@@ -131,7 +131,7 @@ class Api::V1::SpotifyController < ApplicationController
 
     @headers = request.headers
 
-    @playlist_uris = JSON.parse(request.body.read)["playlist_uris"]
+    @playlist_uris = search_params["playlist_uris"]
 
     @spotify_user_id = @current_user["username"]
 
@@ -181,11 +181,11 @@ class Api::V1::SpotifyController < ApplicationController
 
     playlist_data = JSON.parse(add_songs_to_playlist_response.body)
 
-    @response_data = {
+    @saved_playlist_response = {
       playlist_uri: @playlist_uri
     }
-
-    render json: @response_data
+    
+    render json: @saved_playlist_response
 
   end
 
@@ -300,7 +300,7 @@ class Api::V1::SpotifyController < ApplicationController
   end
 
   def search_params
-    params.permit(:mood, :genreone, :genretwo, :genrethree )
+    params.permit(:mood, :genreone, :genretwo, :genrethree, :playlist_uris)
   end
 
 end
