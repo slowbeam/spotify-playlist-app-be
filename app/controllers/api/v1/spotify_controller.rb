@@ -1,5 +1,5 @@
 class Api::V1::SpotifyController < ApplicationController
-  before_action :set_user, only: [:search, :create_playlist, :refresh_token]
+  before_action :set_user, only: [:search, :create_playlist, :create_playlist_two, :refresh_token]
   before_action :refresh_token, only: [:search, :create_playlist]
   before_action :set_mood, only: [:search, :create_playlist_two]
   skip_before_action :authorized, only: [:search, :create_playlist]
@@ -156,6 +156,7 @@ class Api::V1::SpotifyController < ApplicationController
       description: "A playlist of #{mood_word} songs made with the vibelist app."
     }
 
+
     create_playlist_response = RestClient.post(url, body.to_json, header)
 
     playlist_data = JSON.parse(create_playlist_response.body)
@@ -184,7 +185,7 @@ class Api::V1::SpotifyController < ApplicationController
     @saved_playlist_response = {
       playlist_uri: @playlist_uri
     }
-    
+
     render json: @saved_playlist_response
 
   end
