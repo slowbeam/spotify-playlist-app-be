@@ -28,15 +28,6 @@ ActiveRecord::Schema.define(version: 2018_09_12_193222) do
     t.index ["user_id"], name: "index_moods_on_user_id"
   end
 
-  create_table "song_users", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "song_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["song_id"], name: "index_song_users_on_song_id"
-    t.index ["user_id"], name: "index_song_users_on_user_id"
-  end
-
   create_table "songs", force: :cascade do |t|
     t.string "title"
     t.string "artist"
@@ -67,6 +58,4 @@ ActiveRecord::Schema.define(version: 2018_09_12_193222) do
 
   add_foreign_key "moods", "songs"
   add_foreign_key "moods", "users"
-  add_foreign_key "song_users", "songs"
-  add_foreign_key "song_users", "users"
 end
