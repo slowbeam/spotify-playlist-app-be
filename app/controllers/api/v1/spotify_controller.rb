@@ -118,6 +118,7 @@ class Api::V1::SpotifyController < ApplicationController
 
     end
 
+
     @response_data = {
       mood: @mood,
       mood_list_id: @mood_list_id,
