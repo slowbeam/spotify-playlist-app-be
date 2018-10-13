@@ -102,6 +102,8 @@ class Api::V1::SpotifyController < ApplicationController
       mood_list_id = 0
     end
 
+    @current_songs = []
+
     search_data["tracks"].each do |track|
 
       if @current_playlist.length === 0
@@ -111,6 +113,8 @@ class Api::V1::SpotifyController < ApplicationController
       end
 
       currentSong = Song.find_or_create_by(artist: track["artists"][0]["name"], title: track["name"], album_cover: track["album"]["images"][1]["url"], spotify_id: track["id"], uri: track["uri"])
+
+      @current_songs.push(currentSong)
 
       @mood_list_id = mood_list_id
 
@@ -122,6 +126,7 @@ class Api::V1::SpotifyController < ApplicationController
       mood: @mood,
       mood_list_id: @mood_list_id,
       playlist_uris: @current_playlist,
+      current_songs: @current_songs
     }
 
     render json: @response_data
