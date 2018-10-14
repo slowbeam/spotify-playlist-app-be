@@ -52,9 +52,6 @@ skip_before_action :authorized, only: [:create]
         username: @user.username,
         display_name: @user.display_name,
         profile_image: @user.profile_image,
-        sadlist_uri: @user.sadlist_uri,
-        contentlist_uri: @user.contentlist_uri,
-        ecstaticlist_uri: @user.ecstaticlist_uri,
         t: @user.access_token
       }
 
