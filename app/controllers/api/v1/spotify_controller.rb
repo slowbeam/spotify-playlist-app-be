@@ -316,11 +316,9 @@ class Api::V1::SpotifyController < ApplicationController
   end
 
   def search_params
-<<<<<<< HEAD
-    params.permit(:mood, :jwt, :genreone, :genretwo, :genrethree, :playlist_uris_string)
-=======
+
     params.permit(:mood, :genreone, :genretwo, :genrethree, :playlist_uris)
->>>>>>> no_refresh
+
   end
 
 end
