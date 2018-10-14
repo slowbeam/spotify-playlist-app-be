@@ -132,7 +132,7 @@ class Api::V1::SpotifyController < ApplicationController
     render json: @response_data
   end
 
-  def create_playlist_two
+  def create_playlist
 
     @headers = request.headers
 
