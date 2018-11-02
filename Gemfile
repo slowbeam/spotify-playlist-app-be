@@ -55,3 +55,5 @@ gem 'pry'
 gem 'figaro'
 
 gem 'jwt'
+
+gem "loofah", ">= 2.2.3"
