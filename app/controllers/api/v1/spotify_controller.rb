@@ -132,7 +132,7 @@ class Api::V1::SpotifyController < ApplicationController
     render json: @response_data
   end
 
-  def create_playlist_two
+  def create_playlist
 
     @mood = search_params["mood"]
 
@@ -195,84 +195,6 @@ class Api::V1::SpotifyController < ApplicationController
 
   end
 
-
-  def create_playlist
-
-    @playlist_uris_string = search_params[:playlist_uris_string]
-
-
-    current_mood = search_params[:mood]
-
-    @spotify_user_id = @current_user["username"]
-
-    url = "https://api.spotify.com/v1/users/#{@spotify_user_id}/playlists"
-
-    header = {
-      Authorization: "Bearer #{@current_user["access_token"]}",
-      "Content-Type": "application/json"
-    }
-
-    case current_mood
-      when 'sad'
-        mood_word = 'sad'
-      when 'content'
-        mood_word = 'happy'
-      when 'ecstatic'
-        mood_word = 'super happy'
-    end
-
-    body = {
-      name: "my #{mood_word} vibelist",
-      description: "A playlist of #{mood_word} songs made with the vibelist app."
-    }
-
-    create_playlist_response = RestClient.post(url, body.to_json, header)
-
-    playlist_data = JSON.parse(create_playlist_response.body)
-
-    @playlist_uri = playlist_data["uri"]
-
-    mood_list_id = @current_user.moods.last.mood_list_id
-
-    Mood.where(mood_list_id: mood_list_id).update_all("playlist_uri = '#{@playlist_uri}'")
-    Mood.where(mood_list_id: mood_list_id).update_all("saved = true")
-
-    case current_mood
-      when 'sad'
-        mood_word = 'sad'
-      when 'content'
-        mood_word = 'happy'
-      when 'ecstatic'
-        mood_word = 'super happy'
-    end
-
-    playlist_id = playlist_data["id"]
-
-    add_songs_url = "https://api.spotify.com/v1/playlists/" + playlist_id +"/tracks"
-
-    playlist_uri_array = @playlist_uris_string.split(", ")
-
-    add_songs_body = {
-      uris: playlist_uri_array
-    }
-
-    add_songs_to_playlist_response = RestClient.post(add_songs_url, add_songs_body.to_json, header)
-
-    playlist_data = JSON.parse(add_songs_to_playlist_response.body)
-
-
-    case current_mood
-      when 'sad'
-        redirect_to "https://vibelist.herokuapp.com/create-sad-vibelist?mood=" + current_mood +
-        "&uri=" + @playlist_uri
-      when 'content'
-        redirect_to "https://vibelist.herokuapp.com/create-content-vibelist?mood=" + current_mood + "&uri=" + @playlist_uri
-      when 'ecstatic'
-        redirect_to "https://vibelist.herokuapp.com/create-ecstatic-vibelist?mood=" + current_mood + "&uri=" + @playlist_uri
-    end
-
-  end
-
   def refresh_token
 
     url = "https://accounts.spotify.com/api/token"
@@ -316,11 +238,9 @@ class Api::V1::SpotifyController < ApplicationController
   end
 
   def search_params
-<<<<<<< HEAD
-    params.permit(:mood, :jwt, :genreone, :genretwo, :genrethree, :playlist_uris_string)
-=======
+
     params.permit(:mood, :genreone, :genretwo, :genrethree, :playlist_uris)
->>>>>>> no_refresh
+
   end
 
 end
