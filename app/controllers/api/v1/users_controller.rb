@@ -15,7 +15,7 @@ skip_before_action :authorized, only: [:create]
       body = {
         grant_type: "authorization_code",
         code: params[:code],
-        redirect_uri: 'https://vibelist-server.herokuapp.com/api/v1/logging-in',
+        redirect_uri: 'http://localhost:3000/api/v1/logging-in',
         client_id: ENV['CLIENT_ID'],
         client_secret: ENV['CLIENT_SECRET']
       }
@@ -58,7 +58,7 @@ skip_before_action :authorized, only: [:create]
         t: @user.access_token
       }
 
-      url = "https://vibelist.herokuapp.com/welcome"
+      url = "http://localhost:3001/welcome"
 
       redirect_to "#{url}?#{response_query_params.to_query}"
     end
