@@ -8,14 +8,13 @@ skip_before_action :authorized, only: [:create]
 
   def create
     if params[:error]
-
       puts 'LOGIN ERROR', params
-      redirect_to 'https://vibelist.herokuapp.com/'
+      redirect_to ENV['REACT_APP_BASE_URL']
     else
       body = {
         grant_type: "authorization_code",
         code: params[:code],
-        redirect_uri: 'https://vibelist-server.herokuapp.com/api/v1/logging-in',
+        redirect_uri: "#{ENV['API_BASE_URL']}/api/v1/logging-in",
         client_id: ENV['CLIENT_ID'],
         client_secret: ENV['CLIENT_SECRET']
       }
@@ -55,9 +54,14 @@ skip_before_action :authorized, only: [:create]
         t: @user.access_token
       }
 
-      url = "https://vibelist.herokuapp.com/welcome"
+      response_html = "<html>
+                        <script>
+                          window.localStorage.setItem('JWT', '#{token}');
+                          window.location.href = '#{ENV['REACT_APP_BASE_URL'] + '/welcome'}';
+                        </script>
+                      </html>".html_safe
 
-      redirect_to "#{url}?#{response_query_params.to_query}"
+      render html: response_html
     end
   end
 
