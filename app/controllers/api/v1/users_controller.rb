@@ -47,21 +47,10 @@ skip_before_action :authorized, only: [:create]
       token = encode_token(user_id: @user.id)
 
       response_query_params = {
-        jwt: token,
-        username: @user.username,
-        display_name: @user.display_name,
-        profile_image: @user.profile_image,
-        t: @user.access_token
+        jwt: token
       }
 
-      response_html = "<html>
-                        <script>
-                          window.localStorage.setItem('JWT', '#{token}');
-                          window.location.href = '#{ENV['REACT_APP_BASE_URL'] + '/welcome'}';
-                        </script>
-                      </html>".html_safe
-
-      render html: response_html
+      redirect_to "#{ENV['REACT_APP_BASE_URL']}/welcome?#{response_query_params.to_query}"
     end
   end
 
