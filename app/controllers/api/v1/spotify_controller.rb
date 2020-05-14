@@ -4,7 +4,6 @@ class Api::V1::SpotifyController < ApplicationController
   before_action :set_mood, only: [:search, :create_playlist]
 
   def search
-
     @genre_one = search_params["genreone"]
     @genre_two = search_params["genretwo"]
     @genre_three = search_params["genrethree"]
@@ -96,7 +95,7 @@ class Api::V1::SpotifyController < ApplicationController
     @current_playlist = ""
 
     if @current_user.moods.last
-    mood_list_id = @current_user.moods.last.mood_list_id + 1
+      mood_list_id = @current_user.moods.last.mood_list_id + 1
     else
       mood_list_id = 0
     end
@@ -132,7 +131,6 @@ class Api::V1::SpotifyController < ApplicationController
   end
 
   def create_playlist
-
     @mood = search_params["mood"]
 
     @playlist_uris = search_params["playlist_uris"]
@@ -191,11 +189,9 @@ class Api::V1::SpotifyController < ApplicationController
     }
 
     render json: @saved_playlist_response
-
   end
 
   def refresh_token
-
     url = "https://accounts.spotify.com/api/token"
 
     if @current_user.access_token_expired?
@@ -237,9 +233,6 @@ class Api::V1::SpotifyController < ApplicationController
   end
 
   def search_params
-
     params.permit(:mood, :genreone, :genretwo, :genrethree, :playlist_uris)
-
   end
-
 end
