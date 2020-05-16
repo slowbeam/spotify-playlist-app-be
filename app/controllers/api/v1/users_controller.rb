@@ -55,8 +55,6 @@ skip_before_action :authorized, only: [:create]
   end
 
   def logged_in_user
-    current_user ? (render json: UserSerializer.new(current_user), status: 200) : (render json: {message: 'User not found'}, status: 404)
+    current_user ? (render json: current_user, root: 'data', serializer: UserSerializer) : (render json: {message: 'User not found'}, status: 404)
   end
-
-
 end
